@@ -31,34 +31,27 @@ func main() {
 			}
 			continue
 		}
-
 		executePageAction(page, accountToLogIn)
-
 		if page == 8 {
 			fmt.Println("\nAutomation complete!")
 			break
 		}
 	}
 }
-
 func dumpUI() string {
 	exec.Command("adb", "shell", "uiautomator", "dump").Run()
 	time.Sleep(200 * time.Millisecond)
-
 	cmd := exec.Command("adb", "shell", "cat", "/sdcard/window_dump.xml")
 	out, _ := cmd.Output()
 	xmlStr := string(out)
-
 	if strings.Contains(xmlStr, `com.badoo.mobile:id/ad_container`) {
 		fmt.Println("Ad bar detected at bottom")
 		moveUp = true
 	} else {
 		moveUp = false
 	}
-
 	return xmlStr
 }
-
 func detectPage(xml string) int {
 	if strings.Contains(xml, "nav_bar_button_profile") && !strings.Contains(xml, "ownProfileRootView") {
 		return 1
